@@ -5,7 +5,7 @@ import { ContactList } from './Contact list/ContactList';
 import { Filter } from './Filter/Filter';
 import { Global } from './Global';
 
-const KEY = "contacts"
+const KEY = 'contacts';
 
 export class App extends Component {
   state = {
@@ -13,18 +13,22 @@ export class App extends Component {
     filter: '',
   };
 
-  componentDidMount(){
-    this.setState({
-      contacts: JSON.parse(localStorage.getItem(KEY))
-    })
-    
-  }
-
-  componentDidUpdate(_, prevState){
-    if(prevState.contacts !== this.state.contacts){
-      localStorage.setItem(KEY, JSON.stringify(this.state.contacts))
+  componentDidMount() {
+    const result = localStorage.getItem(KEY);
+    if (result !== null) {
+      this.setState({
+        contacts: JSON.parse(result),
+      });
     }
   }
+
+  componentDidUpdate(_, prevState) {
+    if (prevState.contacts !== this.state.contacts) {
+      localStorage.setItem(KEY, JSON.stringify(this.state.contacts));
+    }
+  }
+
+  g;
 
   addNewContact = ({ name, number }) => {
     if (
@@ -47,11 +51,11 @@ export class App extends Component {
     }));
   };
 
-  deleteContact =(contactId) => {
+  deleteContact = contactId => {
     this.setState(prev => ({
       contacts: prev.contacts.filter(item => item.id !== contactId),
     }));
-  }
+  };
 
   onFilterInput = e => {
     this.setState({
@@ -60,8 +64,8 @@ export class App extends Component {
   };
 
   findPhones() {
-    const {filter, contacts} = this.state;
-    
+    const { filter, contacts } = this.state;
+
     const normalizedValue = filter.toLowerCase();
     const filteredArray = contacts.filter(contact =>
       contact.name.toLowerCase().includes(normalizedValue)
@@ -70,12 +74,12 @@ export class App extends Component {
   }
 
   render() {
-    const {filter} = this.state;  
+    const { filter } = this.state;
 
     return (
       <div>
-        <Global/>
-        
+        <Global />
+
         <h1>Phonebook</h1>
         <ContactForm onSubmit={this.addNewContact} />
 
